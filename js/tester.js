@@ -1,13 +1,8 @@
 const Request = require('./request');
 
-
-
 class Tester {
     constructor() {
         this.cache = [Request];
-        this.route = '/';
-        this.method = 'GET';
-        this.data = null;
     }
 
     async submitRequest(route, method, data) {
@@ -17,7 +12,7 @@ class Tester {
         
         console.log(responseBody);
 
-        this.cache.push(new Request())
+        this.cache.push(request);
     }
 }
 
