@@ -5,7 +5,7 @@ class Tester {
         this.cache = [];
         this.route = '/';
         this.method = 'GET';
-        this.data = { "warning": "no data provided" };
+        this.data = null;
     }
 
     async submit() {

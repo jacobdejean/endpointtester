@@ -1,7 +1,6 @@
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
-const fetch = require('node-fetch');
 const Tester = require('./js/tester');
 
 let _tester = new Tester();
