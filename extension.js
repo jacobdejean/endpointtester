@@ -45,9 +45,7 @@ function activate(context) {
 function deactivate() {}
 
 function handleWebviewMessage(message) {
-	_tester.route = message.route;
-	_tester.method = message.method;
-	_tester.submit();
+	_tester.submitRequest(message.route, message.method, null);
 }
 
 function getWebviewOptions(ctx) {
