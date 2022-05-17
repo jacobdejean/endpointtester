@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 class Tester {
     constructor() {
         this.cache = [];
