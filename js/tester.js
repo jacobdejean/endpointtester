@@ -11,7 +11,7 @@ class Tester {
     async submit() {
         const response = await fetch(this.route, {
             method: this.method,
-            body: this.data
+            body: this.method === "GET" ? null : this.data
         });
 
         const responseBody = await response.text();
