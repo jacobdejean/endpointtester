@@ -25,6 +25,7 @@ function activate(context) {
 
 		const nonce = getNonce();
 
+		// Tries to prevent someone from manually inserting matching nonces into html
 		if(!compactViewHtml.includes('{nonce}')) throw new Error('External html has been tampered with. Exiting.');
 
 		compactViewHtml = compactViewHtml
