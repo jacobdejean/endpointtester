@@ -1,22 +1,23 @@
-const fetch = require('node-fetch');
+const Request = require('./request');
+
+
 
 class Tester {
     constructor() {
-        this.cache = [];
+        this.cache = [Request];
         this.route = '/';
         this.method = 'GET';
         this.data = null;
     }
 
-    async submit() {
-        const response = await fetch(this.route, {
-            method: this.method,
-            body: this.method === "GET" ? null : this.data
-        });
-
-        const responseBody = await response.text();
+    async submitRequest(route, method, data) {
+        let request = new Request(route, method, data);
+        let response = await request.send();
+        let responseBody = await response.text();
         
         console.log(responseBody);
+
+        this.cache.push(new Request())
     }
 }
 
