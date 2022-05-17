@@ -1,35 +1,70 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
+const fs = require('fs');
+const path = require('path');
+const fetch = require('node-fetch');
+const Tester = require('./js/tester');
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+let _tester = new Tester();
 
 /**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "endpointtester" is now active!');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with  registerCommand
-	// The commandId parameter must match the command field in package.json
 	let disposable = vscode.commands.registerCommand('endpointtester.endpointTester', function () {
 		vscode.window.showInformationMessage('Started endpointtester');
 
-		const panel = vscode.window.createWebviewPanel('endpointtester', "Endpoint Tester", vscode.ViewColumn.One, {});
+		const panel = vscode.window.createWebviewPanel('endpointtester', "Endpoint Tester", vscode.ViewColumn.One, getWebviewOptions(context));
 
-		panel.webview.html = "Route: <input></input><button>GET</button><button>POST</button>"
+		const stylePath = vscode.Uri.joinPath(context.extensionUri, 'styles', 'stylesheet.css');
+		const styleUri = panel.webview.asWebviewUri(stylePath);
+		
+		const compactPath = vscode.Uri.file(path.join(context.extensionPath, 'views', 'compact.html'));
+		let compactViewHtml = fs.readFileSync(compactPath.fsPath, 'utf8').toString();
+
+		const nonce = getNonce();
+
+		compactViewHtml = compactViewHtml
+			.replace('{style}', styleUri.toString())
+			.replace('{cspSource}', panel.webview.cspSource)
+			.replace('{nonce}', nonce)
+			.replace('{nonce}', nonce);
+
+		panel.webview.onDidReceiveMessage(handleWebviewMessage, undefined, context.subscriptions);
+
+		panel.webview.html = compactViewHtml;
 	});
 
 	context.subscriptions.push(disposable);
 }
 
-// this method is called when your extension is deactivated
 function deactivate() {}
+
+function handleWebviewMessage(message) {
+	_tester.route = message.route;
+	_tester.method = message.method;
+	_tester.submit();
+}
+
+function getWebviewOptions(ctx) {
+	return {
+		localResourceRoots: [
+			vscode.Uri.file(path.join(ctx.extensionPath, 'styles')),
+			vscode.Uri.file(path.join(ctx.extensionPath, 'js')) ],
+		enableScripts: true
+	}
+}
+
+function getNonce() {
+	let text = '';
+	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	for (let i = 0; i < 32; i++) {
+		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+	return text;
+}
 
 module.exports = {
 	activate,
