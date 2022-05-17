@@ -25,6 +25,8 @@ function activate(context) {
 
 		const nonce = getNonce();
 
+		if(!compactViewHtml.includes('{nonce}')) throw new Error('External html has been tampered with. Exiting.');
+
 		compactViewHtml = compactViewHtml
 			.replace('{style}', styleUri.toString())
 			.replace('{cspSource}', panel.webview.cspSource)
