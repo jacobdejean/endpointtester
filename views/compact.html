@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+    <head>
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src {cspSource}; script-src 'nonce-{nonce}';">
+        <link href="{style}" rel="stylesheet" />
+    </head>
+    <body>
+        <script nonce="{nonce}">
+                document.addEventListener('DOMContentLoaded', function () {
+                    const vscode = acquireVsCodeApi();
+
+                    const routeInput = document.getElementById('routeInput');
+                    const routeType = document.getElementById('routeType');
+                    const submitButton = document.getElementById('submit');
+                    
+                    submitButton.addEventListener('click', () => { 
+                        vscode.postMessage({
+                            route: routeInput.value, 
+                            method: routeType.options[routeType.selectedIndex].text
+                        });
+                    });
+                });
+        </script>
+        <h3>Route</h3>
+        <input id="routeInput" class="route-input" placeholder="/route"></input>
+        <select id="routeType" class="route-type-select" name="endpointType" id="endpointTypeSelect">
+            <option value="get">GET</option>
+            <option value="get">POST</option>
+            <option value="get">PUT</option>
+            <option value="get">DELETE</option>
+        </select>
+        <button id="submit" class="submit-button">Submit</button>
+    </body>
+</html>
