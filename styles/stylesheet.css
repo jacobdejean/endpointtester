@@ -21,9 +21,12 @@ select {
     border-radius: 0px;
 }
 
-textarea {
+text {
     background-color: var(--vscode-editor-background);
     color : var(--vscode-editor-foreground);
+    font-family: var(--vscode-font-family);
+    font-weight: bold;
+    border-radius: 5px;
 }
 
 .route-input {

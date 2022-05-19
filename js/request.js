@@ -1,3 +1,4 @@
+const { FetchError } = require('node-fetch');
 const fetch = require('node-fetch');
 
 class Request {
@@ -9,10 +10,15 @@ class Request {
     }
 
     async send() {
-        return await fetch(this.root + this.route, {
-            method: this.method,
-            body: this.method === "GET" ? null : this.data
-        });
+        try {
+            return await fetch(this.root + this.route, {
+                method: this.method,
+                body: this.method === "GET" ? null : this.data
+            });
+        } 
+        catch (error) {
+            return error;
+        }
     }
 }
 

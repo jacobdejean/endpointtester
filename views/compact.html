@@ -24,8 +24,22 @@
                     });
 
                     window.addEventListener('message', event => {
-                        outputText.value += event.data + '\n';
+                        let logLine = document.createElement("div");
+                        logLine.style.marginBottom = '10px';
+                        event.data.forEach(token => {
+                            let tokenText = document.createElement("text");
+                            
+                            styleTokenText(token, tokenText);
+                            logLine.appendChild(tokenText);
+                        });
+                        outputText.appendChild(logLine);
                     });
+
+                    function styleTokenText(token, tokenText) {
+                        tokenText.textContent = String.fromCharCode(160) + token.text + String.fromCharCode(160);
+                        tokenText.style.backgroundColor = token.highlight;
+                        tokenText.style.color = token.color;
+                    }
                 });
         </script>
         <div class="area">
@@ -50,7 +64,7 @@
         </div>
         <div class="area">
             <h3 class="label">output:</h3>
-            <textarea class="outputText" id="outputText"></textarea>
+            <div class="outputText" id="outputText"></div>
         </div>
     </body>
 </html>
