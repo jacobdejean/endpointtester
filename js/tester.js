@@ -3,6 +3,12 @@ const marky = require('marky');
 const { FetchError } = require('node-fetch');
 const { Response } = require('node-fetch');
 
+const RED = "#D00000";
+const BLUE = "#1A659E";
+const GREEN = "#5FAD56";
+const WHITE = "#FFFFFF";
+const BLACK = "#000000";
+
 class Tester {
     constructor() {
         this.cache = [Request];
@@ -12,8 +18,8 @@ class Tester {
         this.webview = webview;
     }
 
-    logOutput(log) {
-        this.webview.postMessage(log);
+    logOutput(log, content) {
+        this.webview.postMessage({ tokens: log, content: content })
     }
 
     async submitRequest(root, route, method, data) {
@@ -30,55 +36,49 @@ class Tester {
     }
 
     handleResponse(response) {
-        response instanceof FetchError ? this.logResponseAsFetchError(response) : 
-        response instanceof TypeError ? this.logResponseAsTypeError(response) :
-        response instanceof Response ? this.logResponseAsRecieved(response) : null;
+        response instanceof FetchError ? this.logResponseAsFetchError(response) :
+            response instanceof TypeError ? this.logResponseAsTypeError(response) :
+                response instanceof Response ? this.logResponseAsRecieved(response) : null;
     }
 
     logResponseAsFetchError(response) {
         this.logOutput([
-            { text: "error", highlight: "red", color: "white" },
-            { text: response.errno, highlight: "red", color: "white" }
+            { text: "error", highlight: RED, color: WHITE },
+            { text: response.errno, highlight: "transparent", color: WHITE }
         ]);
     }
 
     logResponseAsTypeError(response) {
         this.logOutput([
-            { text: "error", highlight: "red", color: "white" },
-            { text: response.message, highlight: "transparent", color: "white" }
+            { text: "error", highlight: RED, color: WHITE },
+            { text: response.message, highlight: "transparent", color: WHITE }
         ]);
     }
 
-    logResponseAsRecieved(response) {
+    async logResponseAsRecieved(response) {
         let responseTime = marky.stop('requestSend').duration.toFixed(2);
+        let responseBody = await response.json();
 
         this.logOutput([
-            { text: response.status, highlight: mapStatusCode(response.status), color: "white" },
-            { text: response.statusText, highlight: mapStatusCode(response.status), color: "white" },
-            { text: 'in', highlight: "transparent", color: "white" },
-            { text: responseTime, highlight: "white", color: "black" },
-            { text: "ms", highlight: "white", color: "black" }
+            { text: response.status, highlight: mapStatusCode(response.status), color: WHITE },
+            { text: response.statusText, highlight: mapStatusCode(response.status), color: WHITE },
+            { text: 'in', highlight: "transparent", color: WHITE },
+            { text: responseTime, highlight: WHITE, color: BLACK },
+            { text: "ms", highlight: WHITE, color: BLACK }
         ]);
 
-        //this.logOutput([
-        //    { text: JSON.stringify(response, null, 4), highlight: "transparent", color: "white" }
-        //]);
+        this.logOutput([
+            { text: ">", highlight: "transparent", color: WHITE },
+            { text: "body", highlight: WHITE, color: BLACK }
+        ], responseBody);
     }
 }
 
 function mapStatusCode(status) {
-    if (status < 200) {
-        return "white";
-    }
-    else if (status < 300) {
-        return "green";
-    }
-    else if (status < 400) {
-        return "blue";
-    }
-    else if (status < 600) {
-        return "red";
-    }
+    return status < 200 ? WHITE :
+        status < 300 ? GREEN :
+            status < 400 ? BLUE :
+                status < 600 ? RED : WHITE
 }
 
 module.exports = Tester;
