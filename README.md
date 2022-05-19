@@ -4,9 +4,17 @@ A simple endpoint test tool as a vscode extension.
 
 ## Features
 
-![Compact view](images/preview.png)
+![Compact view](images/preview1.png)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+### Implemented
+* Send HTTP requests to local and remote endpoints
+* View responses to requests
+
+### Planned
+* Create route test flows
+
+## How to use
+
 
 ## Requirements
 
