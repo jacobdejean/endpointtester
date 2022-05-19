@@ -4,7 +4,7 @@ A simple endpoint test tool as a vscode extension.
 
 ## Features
 
-![Compact view](images/preview1.png)
+![Overview](images/preview1.png)
 
 ### Implemented
 * Send HTTP requests to local and remote endpoints
@@ -15,19 +15,17 @@ A simple endpoint test tool as a vscode extension.
 
 ## How to use
 
+### Enter root.
+![Compact view](images/enterroot.png)
 
-## Requirements
+### Enter route.
+![Compact view](images/enterroute.png)
 
-.todo
+### Enter method.
+![Compact view](images/entermethod.png)
 
-## Extension Settings
+### View output.
+![Compact view](images/seeoutput.png)
 
-.todo
-
-## Known Issues
-
-.todo
-
-## Release Notes
-
-.todo
+### You can view the response body by clicking the 'body' token.
+![Compact view](images/expandbody.png)
