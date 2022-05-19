@@ -21,19 +21,39 @@
                             route: routeInput.value, 
                             method: routeType.options[routeType.selectedIndex].text
                         });
+                        outputText.innerHTML = "";
                     });
 
                     window.addEventListener('message', event => {
                         let logLine = document.createElement("div");
                         logLine.style.marginBottom = '10px';
-                        event.data.forEach(token => {
+                        
+                        if(event.data.content != null) {
+                            let details = document.createElement("details");
+                            let summary = document.createElement("summary");
+                            let textArea = document.createElement("textarea");
+                            
+                            textArea.value = JSON.stringify(event.data.content, null, 4);
+                            appendTokens(event, summary);
+                            details.appendChild(summary);
+                            details.appendChild(textArea);
+                            logLine.appendChild(details);
+                        } else {
+                            appendTokens(event, logLine);
+                        }
+
+                        outputText.appendChild(logLine);
+                    });
+
+                    function appendTokens(event, parent) {
+                        event.data.tokens.forEach(token => {
                             let tokenText = document.createElement("text");
                             
                             styleTokenText(token, tokenText);
-                            logLine.appendChild(tokenText);
+                            parent.appendChild(tokenText);
+                            parent.appendChild(document.createTextNode(String.fromCharCode(160)));
                         });
-                        outputText.appendChild(logLine);
-                    });
+                    }
 
                     function styleTokenText(token, tokenText) {
                         tokenText.textContent = String.fromCharCode(160) + token.text + String.fromCharCode(160);
