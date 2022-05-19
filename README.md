@@ -4,8 +4,6 @@ A simple endpoint test tool as a vscode extension.
 
 ## Features
 
-![Overview](images/preview1.png)
-
 ### Implemented
 * Send HTTP requests to local and remote endpoints
 * View responses to requests
