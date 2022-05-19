@@ -21,16 +21,44 @@ select {
     border-radius: 0px;
 }
 
+textarea {
+    background-color: var(--vscode-editor-background);
+    color : var(--vscode-editor-foreground);
+}
+
 .route-input {
-    width: 20em;
+    width: 15em;
     height: 2em;
+
+    display: inline-block;
+    margin-left: 1em;
 }
 
 .route-type-select {
     height: 2em;
+    margin-left: 1em;
 }
 
 .submit-button {
     width: 8em;
     height: 2em;
+}
+
+.label {
+    display: inline-block;
+}
+
+.area {
+    width: 30em;
+    margin: 0px 0px 0px 0px;
+}
+
+.outputText {
+    width: 100%;
+    height: 10em;
+    border: none;
+}
+
+.area-component {
+    width: 100%;
 }

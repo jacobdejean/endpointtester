@@ -25,6 +25,8 @@ function activate(context) {
 
 		const nonce = getNonce();
 
+		_tester.setWebview(panel.webview);
+
 		// Tries to prevent someone from manually inserting matching nonces into html
 		if(!compactViewHtml.includes('{nonce}')) throw new Error('External html has been tampered with. Exiting.');
 
@@ -45,7 +47,7 @@ function activate(context) {
 function deactivate() {}
 
 function handleWebviewMessage(message) {
-	_tester.submitRequest(message.route, message.method, null);
+	_tester.submitRequest(message.root, message.route, message.method, null);
 }
 
 function getWebviewOptions(ctx) {
