@@ -9,26 +9,48 @@
                 document.addEventListener('DOMContentLoaded', function () {
                     const vscode = acquireVsCodeApi();
 
+                    const rootInput = document.getElementById('rootInput');
                     const routeInput = document.getElementById('routeInput');
                     const routeType = document.getElementById('routeType');
                     const submitButton = document.getElementById('submit');
+                    const outputText = document.getElementById('outputText');
                     
                     submitButton.addEventListener('click', () => { 
                         vscode.postMessage({
+                            root: rootInput.value,
                             route: routeInput.value, 
                             method: routeType.options[routeType.selectedIndex].text
                         });
                     });
+
+                    window.addEventListener('message', event => {
+                        outputText.value += event.data + '\n';
+                    });
                 });
         </script>
-        <h3>Route</h3>
-        <input id="routeInput" class="route-input" placeholder="/route"></input>
-        <select id="routeType" class="route-type-select" name="endpointType" id="endpointTypeSelect">
-            <option value="get">GET</option>
-            <option value="get">POST</option>
-            <option value="get">PUT</option>
-            <option value="get">DELETE</option>
-        </select>
-        <button id="submit" class="submit-button">Submit</button>
+        <div class="area">
+            <div class="area-component">
+                <h3 class="label">root:</h3>
+                <input id="rootInput" class="route-input" placeholder="http://localhost:8080"></input>
+            </div>
+            <div class="area-component">
+                <h3 class="label">route:</h3>
+                <input id="routeInput" class="route-input" placeholder="/api/endpoint"></input>
+            </div>
+            <div class="area-component">
+                <h3 class="label">method:</h3>
+                <select id="routeType" class="route-type-select" name="endpointType" id="endpointTypeSelect">
+                    <option value="get">GET</option>
+                    <option value="get">POST</option>
+                    <option value="get">PUT</option>
+                    <option value="get">DELETE</option>
+                </select>
+                <button id="submit" class="submit-button">Submit</button>
+            </div>
+        </div>
+        <div class="area">
+            <h3 class="label">output:</h3>
+            <textarea class="outputText" id="outputText"></textarea>
+        </div>
     </body>
 </html>
