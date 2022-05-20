@@ -57,7 +57,6 @@ class Tester {
 
     async logResponseAsRecieved(response) {
         let responseTime = marky.stop('requestSend').duration.toFixed(2);
-        let responseBody = await response.json();
 
         this.logOutput([
             { text: response.status, highlight: mapStatusCode(response.status), color: WHITE },
@@ -67,10 +66,24 @@ class Tester {
             { text: "ms", highlight: WHITE, color: BLACK }
         ]);
 
+        let responseBody = await response.text();
+        let responseType = 'text response';
+
+        try {
+            responseBody = JSON.parse(responseBody);
+            responseType = 'json response';
+        } catch (e) {
+            if(/<\/?[a-z][\s\S]*>/i.test(responseBody)) {
+                responseType = 'html response';
+            }
+        }
+
         this.logOutput([
             { text: ">", highlight: "transparent", color: WHITE },
-            { text: "body", highlight: WHITE, color: BLACK }
+            { text: responseType, highlight: WHITE, color: BLACK }
         ], responseBody);
+
+        
     }
 }
 
