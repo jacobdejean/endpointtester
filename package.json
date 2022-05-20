@@ -11,15 +11,23 @@
 		"Testing"
 	],
 	"activationEvents": [
-        "onCommand:endpointtester.endpointTester"
+        "onCommand:endpointtester.endpointTester",
+		"onView:endpointtester.endpointTesterView"
 	],
 	"main": "./extension.js",
 	"contributes": {
 		"commands": [{
             "command": "endpointtester.endpointTester",
             "title": "Endpoint Tester: Start"
-
-		}]
+		}],
+		"views": {
+			"debug": [{
+					"type": "webview",
+					"id": "endpointtester.endpointTesterView",
+					"name": "Endpoint Tester"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"lint": "eslint .",
