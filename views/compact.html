@@ -35,6 +35,7 @@
                             
                             textArea.value = JSON.stringify(event.data.content, null, 4);
                             appendTokens(event, summary);
+                            summary.children[0].className = "detail-marker";
                             details.appendChild(summary);
                             details.appendChild(textArea);
                             logLine.appendChild(details);

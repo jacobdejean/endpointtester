@@ -44,6 +44,10 @@ details {
     user-select: none;
 }
 
+details[open] summary text.detail-marker {
+    transform: rotate(90deg);
+}
+
 summary {
     display: flex;
     cursor: pointer;
@@ -84,4 +88,8 @@ summary {
 
 .area-component {
     width: 100%;
+}
+
+.detail-marker {
+
 }
