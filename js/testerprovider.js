@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 const fs = require('fs');
+const File = require('fs');
 const path = require('path');
 const Tester = require('./tester');
 
@@ -53,7 +54,13 @@ class TesterProvider {
     }
 
     handleWebviewMessage(message) {
-        this.tester.submitRequest(message.root, message.route, message.method, null);
+        message.messageType === "loadFlow" ? this.loadFlow(message.filePath) :
+        message.messageType === "submit" ? this.tester.submitRequest(message.root, message.route, message.method, null) : null;
+    }
+
+    loadFlow(filePath) {
+        let flow = fs.readFileSync(filePath).toString();
+        this.tester.runFlow(JSON.parse(flow));
     }
     
     getNonce() {

@@ -22,11 +22,45 @@ class Tester {
         this.webview.postMessage({ tokens: log, content: content })
     }
 
-    async submitRequest(root, route, method, data) {
-        this.logOutput(method + ' ' + root + ' ~ ' + data);
+    async runFlow(flow) {
         this.logOutput([
-            { text: method, highlight: "white", color: "black" },
-            { text: route, highlight: "transparent", color: "white" }
+            { text: "running flow", highlight: WHITE, color: BLACK },
+            { text: flow.name, highlight: "transparent", color: WHITE }
+        ]);
+
+        this.logOutput([
+            { text: "root", highlight: WHITE, color: BLACK },
+            { text: flow.root, highlight: "transparent", color: WHITE }
+        ]);
+
+        //flow.variableTokens.forEach((token) => {
+//
+        //});
+
+        //let finalRoute = flow.route.replace()
+        for(let i = 0; i < flow.flow.length; i++) {
+            let flowPart = flow.flow[i];
+
+            flow.variableTokens.forEach(variableToken => {
+                flowPart.route = flowPart.route.replace(variableToken.token, variableToken.default);
+            });
+
+            this.logOutput([
+                { text: flowPart.name, highlight: WHITE, color: BLACK }
+            ]);
+
+            await this.submitRequest(flow.root, flowPart.route, flowPart.method, flowPart.body);
+        }
+
+        this.logOutput([
+            { text: "completed flow", highlight: "transparent", color: BLACK }
+        ]);
+    }
+
+    async submitRequest(root, route, method, data) {
+        this.logOutput([
+            { text: method, highlight: WHITE, color: BLACK },
+            { text: route, highlight: "transparent", color: WHITE }
         ]);
 
         let request = new Request(root, route, method, data);
