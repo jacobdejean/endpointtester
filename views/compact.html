@@ -14,14 +14,30 @@
                     const routeType = document.getElementById('routeType');
                     const submitButton = document.getElementById('submit');
                     const outputText = document.getElementById('outputText');
-                    
+                    const loadFlowButton = document.getElementById('loadFlowButton');
+
                     submitButton.addEventListener('click', () => { 
                         vscode.postMessage({
+                            messageType: "submit",
                             root: rootInput.value,
                             route: routeInput.value, 
                             method: routeType.options[routeType.selectedIndex].text
                         });
                         outputText.innerHTML = "";
+                    });
+
+                    loadFlowButton.addEventListener('click', () => {
+                        let input = document.createElement('input');
+
+                        input.type = 'file';
+                        input.onchange = (_this) => {
+                                let files = Array.from(input.files);
+                                vscode.postMessage({
+                                    messageType: "loadFlow",
+                                    filePath: files[0].path
+                                });
+                            };
+                        input.click();
                     });
 
                     window.addEventListener('message', event => {
@@ -64,6 +80,7 @@
                 });
         </script>
         <div class="area">
+            <button id="loadFlowButton" class="submit-button">Load flow</button>
             <div class="area-component">
                 <h3 class="label">root:</h3>
                 <input id="rootInput" class="route-input" placeholder="http://localhost:8080"></input>
