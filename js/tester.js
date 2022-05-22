@@ -1,7 +1,7 @@
 const Request = require('./request');
 const marky = require('marky');
-const { FetchError } = require('node-fetch');
-const { Response } = require('node-fetch');
+const { FetchError } = require('node-fetch-commonjs');
+const { Response } = require('node-fetch-commonjs');
 
 const RED = "#D00000";
 const BLUE = "#1A659E";

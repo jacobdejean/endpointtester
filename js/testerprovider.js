@@ -15,6 +15,7 @@ class TesterProvider {
     resolveWebviewView(webviewView) {
         webviewView.webview.options = this.getWebviewOptions();
         webviewView.webview.html = this.getHtml(webviewView.webview);
+        webviewView.webview.onDidReceiveMessage(this.handleWebviewMessage.bind(this));
     }
 
     getWebviewOptions() {
@@ -29,7 +30,7 @@ class TesterProvider {
     getHtml(webview) {
         const stylePath = vscode.Uri.joinPath(this.extensionUri, 'styles', 'stylesheet.css');
 		const styleUri = webview.asWebviewUri(stylePath);
-		
+
 		const compactPath = vscode.Uri.file(path.join(this.extensionPath, 'views', 'compact.html'));
 		let compactViewHtml = fs.readFileSync(compactPath.fsPath, 'utf8').toString();
 
@@ -40,17 +41,11 @@ class TesterProvider {
 		// Tries to prevent someone from manually inserting matching nonces into html
 		if(!compactViewHtml.includes('{nonce}')) throw new Error('External html has been tampered with. Exiting.');
 
-		compactViewHtml = compactViewHtml
-			.replace('{style}', styleUri.toString())
-			.replace('{cspSource}', webview.cspSource)
-			.replace('{nonce}', nonce)
-			.replace('{nonce}', nonce);
-
-        webview.onDidReceiveMessage((message) => {
-            this.handleWebviewMessage(message);
-        })
-
-        return compactViewHtml;
+        return compactViewHtml
+        .replace('{style}', styleUri.toString())
+        .replace('{cspSource}', webview.cspSource)
+        .replace('{nonce}', nonce)
+        .replace('{nonce}', nonce);;
     }
 
     handleWebviewMessage(message) {
