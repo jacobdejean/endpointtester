@@ -2,6 +2,7 @@ const Request = require('./request');
 const marky = require('marky');
 const { FetchError } = require('node-fetch-commonjs');
 const { Response } = require('node-fetch-commonjs');
+const { FlowFlags } = require('typescript');
 
 const RED = "#D00000";
 const BLUE = "#1A659E";
@@ -33,46 +34,48 @@ class Tester {
             { text: flow.root, highlight: "transparent", color: WHITE }
         ]);
 
-        //flow.variableTokens.forEach((token) => {
-//
-        //});
+        let operationResult = 0;
 
-        //let finalRoute = flow.route.replace()
         for(let i = 0; i < flow.flow.length; i++) {
-            let flowPart = flow.flow[i];
-
-            flow.variableTokens.forEach(variableToken => {
-                flowPart.route = flowPart.route.replace(variableToken.token, variableToken.default);
-            });
+            const flowPart = flow.flow[i];
+            const contentType = flowPart.contentType === undefined ? null : flowPart.contentType;
 
             this.logOutput([
-                { text: flowPart.name, highlight: WHITE, color: BLACK }
+                { text: flowPart.name, highlight: BLUE, color: WHITE, span: true }
             ]);
 
-            await this.submitRequest(flow.root, flowPart.route, flowPart.method, flowPart.body);
+            operationResult = await this.submitRequest(flow.root, flowPart.route, flowPart.method, JSON.stringify(flowPart.body), contentType);
+
+            if(operationResult > 0) 
+                break;
         }
 
         this.logOutput([
-            { text: "completed flow", highlight: "transparent", color: BLACK }
+            { text: operationResult > 0 ? "flow aborted" : "flow completed", highlight: "transparent", color: operationResult > 0 ? RED : GREEN }
         ]);
     }
 
-    async submitRequest(root, route, method, data) {
+    async submitRequest(root, route, method, data, contentType) {
         this.logOutput([
             { text: method, highlight: WHITE, color: BLACK },
             { text: route, highlight: "transparent", color: WHITE }
         ]);
 
-        let request = new Request(root, route, method, data);
+        this.logOutput([
+            { text: ">", highlight: "transparent", color: WHITE },
+            { text: "sent", highlight: WHITE, color: BLACK }
+        ], data);
+
+        let request = new Request(root, route, method, data, contentType);
 
         marky.mark('requestSend');
-        this.handleResponse(await request.send());
+        return this.handleResponse(await request.send());
     }
 
     handleResponse(response) {
-        response instanceof FetchError ? this.logResponseAsFetchError(response) :
-            response instanceof TypeError ? this.logResponseAsTypeError(response) :
-                response instanceof Response ? this.logResponseAsRecieved(response) : null;
+        return response instanceof FetchError ? this.logResponseAsFetchError(response) :
+               response instanceof TypeError ? this.logResponseAsTypeError(response) :
+               response instanceof Response ? this.logResponseAsRecieved(response) : null;
     }
 
     logResponseAsFetchError(response) {
@@ -80,6 +83,8 @@ class Tester {
             { text: "error", highlight: RED, color: WHITE },
             { text: response.errno, highlight: "transparent", color: WHITE }
         ]);
+
+        return 1;
     }
 
     logResponseAsTypeError(response) {
@@ -87,6 +92,8 @@ class Tester {
             { text: "error", highlight: RED, color: WHITE },
             { text: response.message, highlight: "transparent", color: WHITE }
         ]);
+
+        return 2;
     }
 
     async logResponseAsRecieved(response) {
@@ -117,7 +124,7 @@ class Tester {
             { text: responseType, highlight: WHITE, color: BLACK }
         ], responseBody);
 
-        
+        return 0;
     }
 }
 

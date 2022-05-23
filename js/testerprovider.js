@@ -54,8 +54,17 @@ class TesterProvider {
     }
 
     loadFlow(filePath) {
-        let flow = fs.readFileSync(filePath).toString();
-        this.tester.runFlow(JSON.parse(flow));
+        let flowString = fs.readFileSync(filePath).toString();
+        let flowBuffer = JSON.parse(flowString);
+
+        flowBuffer.cases.forEach(caseToken => {
+            while(flowString.includes(caseToken.token)) {
+                console.log('replaced ' + caseToken.token + ' with ' + caseToken.default);
+                flowString = flowString.replace(caseToken.token, caseToken.default);
+            }
+        });
+
+        this.tester.runFlow(JSON.parse(flowString));
     }
     
     getNonce() {
