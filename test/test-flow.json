@@ -1,14 +1,18 @@
 {
     "name": "Create and set score test",
     "root": "http://localhost:3000",
-    "variableTokens": [ { "token": "{playerName}", "default": "jacob" }, { "token": "{score}", "default": 1 }],
+    "cases": [ { "token": "{playerName}", "default": "ronald" }, { "token": "{score}", "default": 1 }],
     "flow": [
         {
             "name": "Create player",
             "route": "/api/players/",
             "method": "POST",
             "body": {
-                "username": "ronald"
+                "username": "{playerName}"
+            },
+            "contentType": "application/json",
+            "answer": {
+                "username": "{playerName}"
             }
         },
         {
@@ -16,14 +20,20 @@
             "route": "/api/players/{playerName}/score/",
             "method": "PUT",
             "body": {
-                "score": "1"
+                "score": "{score}"
+            },
+            "contentType": "application/json",
+            "answer": {
+                "username": "{playerName}",
+                "score": "${>0}"
             }
         },
         {
             "name": "Get player",
             "route": "/api/players/{playerName}",
             "method": "GET",
-            "body": { }
+            "body": { },
+            "contentType": "application/json"
         }
     ]
 }
