@@ -19,13 +19,13 @@ class Tester {
         this.webview = webview;
     }
 
-    logOutput(log, content) {
-        this.webview.postMessage({ tokens: log, content: content })
+    logOutput(log, content, span) {
+        this.webview.postMessage({ tokens: log, content: content, span: span != null })
     }
 
     async runFlow(flow) {
         this.logOutput([
-            { text: "running flow", highlight: WHITE, color: BLACK },
+            { text: "flow", highlight: WHITE, color: BLACK },
             { text: flow.name, highlight: "transparent", color: WHITE }
         ]);
 
@@ -41,8 +41,8 @@ class Tester {
             const contentType = flowPart.contentType === undefined ? null : flowPart.contentType;
 
             this.logOutput([
-                { text: flowPart.name, highlight: BLUE, color: WHITE, span: true }
-            ]);
+                { text: flowPart.name, highlight: BLUE, color: WHITE }
+            ], null, true);
 
             operationResult = await this.submitRequest(flow.root, flowPart.route, flowPart.method, JSON.stringify(flowPart.body), contentType);
 
@@ -62,8 +62,9 @@ class Tester {
         ]);
 
         this.logOutput([
+            { text: "sent", highlight: WHITE, color: BLACK },
             { text: ">", highlight: "transparent", color: WHITE },
-            { text: "sent", highlight: WHITE, color: BLACK }
+            { text: "view request", highlight: "transparent", color: WHITE }
         ], data);
 
         let request = new Request(root, route, method, data, contentType);
