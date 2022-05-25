@@ -51,7 +51,11 @@
                             
                             textArea.value = JSON.stringify(event.data.content, null, 4);
                             appendTokens(event, summary);
-                            summary.children[0].className = "detail-marker";
+                            summary.children.forEach((t) => {
+                                if(t.innerHTML === '>')
+                                    t.className = "detail-marker";
+                            });
+                            //summary.children[0].className = "detail-marker"; // >
                             details.appendChild(summary);
                             details.appendChild(textArea);
                             logLine.appendChild(details);
@@ -67,6 +71,12 @@
                             let tokenText = document.createElement("text");
                             
                             styleTokenText(token, tokenText);
+
+                            if(event.data.span) {
+                               tokenText.style.display = "block";
+                               tokenText.style.width = "100%";
+                            }
+
                             parent.appendChild(tokenText);
                             parent.appendChild(document.createTextNode(String.fromCharCode(160)));
                         });
@@ -76,9 +86,6 @@
                         tokenText.textContent = String.fromCharCode(160) + token.text + String.fromCharCode(160);
                         tokenText.style.backgroundColor = token.highlight;
                         tokenText.style.color = token.color;
-
-                        if(token.span != undefined && token.span)
-                            tokenText.style.width = "100%";
                     }
                 });
         </script>
