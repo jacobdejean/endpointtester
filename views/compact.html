@@ -38,6 +38,7 @@
                                 });
                             };
                         input.click();
+                        outputText.innerHTML = "";
                     });
 
                     window.addEventListener('message', event => {
@@ -51,11 +52,7 @@
                             
                             textArea.value = JSON.stringify(event.data.content, null, 4);
                             appendTokens(event, summary);
-                            summary.children.forEach((t) => {
-                                if(t.innerHTML === '>')
-                                    t.className = "detail-marker";
-                            });
-                            //summary.children[0].className = "detail-marker"; // >
+                            summary.children[1].className = "detail-marker"; // >
                             details.appendChild(summary);
                             details.appendChild(textArea);
                             logLine.appendChild(details);
@@ -72,13 +69,14 @@
                             
                             styleTokenText(token, tokenText);
 
+                            parent.appendChild(tokenText);
+
                             if(event.data.span) {
                                tokenText.style.display = "block";
                                tokenText.style.width = "100%";
+                            } else {
+                                parent.appendChild(document.createTextNode(String.fromCharCode(160)));
                             }
-
-                            parent.appendChild(tokenText);
-                            parent.appendChild(document.createTextNode(String.fromCharCode(160)));
                         });
                     }
 
