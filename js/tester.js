@@ -2,7 +2,6 @@ const Request = require('./request');
 const marky = require('marky');
 const { FetchError } = require('node-fetch-commonjs');
 const { Response } = require('node-fetch-commonjs');
-const { FlowFlags } = require('typescript');
 
 const RED = "#D00000";
 const BLUE = "#1A659E";
@@ -109,20 +108,22 @@ class Tester {
         ]);
 
         let responseBody = await response.text();
-        let responseType = 'text response';
+        let responseType = 'text';
 
         try {
             responseBody = JSON.parse(responseBody);
-            responseType = 'json response';
+            responseType = 'json';
         } catch (e) {
             if(/<\/?[a-z][\s\S]*>/i.test(responseBody)) {
-                responseType = 'html response';
+                responseType = 'html';
             }
         }
 
         this.logOutput([
+            { text: responseType, highlight: WHITE, color: BLACK },
             { text: ">", highlight: "transparent", color: WHITE },
-            { text: responseType, highlight: WHITE, color: BLACK }
+            { text: "view response", highlight: "transparent", color: WHITE }
+            
         ], responseBody);
 
         return 0;
