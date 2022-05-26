@@ -71,6 +71,13 @@ summary {
     height: 2em;
 }
 
+.load-flow-button {
+    width: 8em;
+    height: 2em;
+
+    margin-top: 10px;
+}
+
 .label {
     display: inline-block;
 }
@@ -94,4 +101,13 @@ summary {
 
 .detail-marker {
 
+}
+
+.tabcontent {
+    display: none;
+}
+
+.tablinks {
+    width: 8em;
+    height: 2em;
 }
