@@ -1,6 +1,5 @@
 const vscode = require('vscode');
 const fs = require('fs');
-const File = require('fs');
 const path = require('path');
 const Tester = require('./tester');
 
