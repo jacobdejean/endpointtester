@@ -133,8 +133,8 @@ class Tester {
 function mapStatusCode(status) {
     return status < 200 ? WHITE :
         status < 300 ? GREEN :
-            status < 400 ? BLUE :
-                status < 600 ? RED : WHITE
+        status < 400 ? BLUE :
+        status < 600 ? RED : WHITE
 }
 
 module.exports = Tester;

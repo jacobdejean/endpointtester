@@ -2,7 +2,7 @@
   "name": "endpointtester",
   "displayName": "endpointtester",
   "description": "Test simple endpoints within Code.",
-  "version": "0.0.1",
+  "version": "0.0.8",
   "repository": "github:jacobdejean/endpointtester",
   "engines": {
     "vscode": "^1.67.0"

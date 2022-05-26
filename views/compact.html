@@ -15,6 +15,8 @@
                     const submitButton = document.getElementById('submit');
                     const outputText = document.getElementById('outputText');
                     const loadFlowButton = document.getElementById('loadFlowButton');
+                    const directLink = document.getElementById('directLink');
+                    const flowsLink = document.getElementById('flowsLink');
 
                     submitButton.addEventListener('click', () => { 
                         vscode.postMessage({
@@ -39,6 +41,18 @@
                             };
                         input.click();
                         outputText.innerHTML = "";
+                    });
+
+                    directLink.addEventListener('click', (element, event) => {
+                        hideAllContent();
+
+                        document.getElementById('directDiv').style.display = "block";
+                    });
+
+                    flowsLink.addEventListener('click', (element, event) => {
+                        hideAllContent();
+
+                        document.getElementById('flowsDiv').style.display = "block";
                     });
 
                     window.addEventListener('message', event => {
@@ -85,27 +99,45 @@
                         tokenText.style.backgroundColor = token.highlight;
                         tokenText.style.color = token.color;
                     }
+
+                    function hideAllContent() {
+                        let panels = document.getElementsByClassName('tabcontent');
+                        for(let i = 0; i < panels.length; i++) {
+                            panels[i].style.display = 'none';
+                        }
+                    }
                 });
         </script>
         <div class="area">
-            <button id="loadFlowButton" class="submit-button">Load flow</button>
-            <div class="area-component">
-                <h3 class="label">root:</h3>
-                <input id="rootInput" class="route-input" placeholder="http://localhost:8080"></input>
+            <div class="tab">
+                <button id="directLink" class="tablinks">Direct</button>
+                <button id="flowsLink" class="tablinks">Flows</button>
             </div>
-            <div class="area-component">
-                <h3 class="label">route:</h3>
-                <input id="routeInput" class="route-input" placeholder="/api/endpoint"></input>
+            <div id="directDiv" class="tabcontent">
+                <div class="area-component">
+                    <h3 class="label">root:</h3>
+                    <input id="rootInput" class="route-input" placeholder="http://localhost:8080"></input>
+                </div>
+                <div class="area-component">
+                    <h3 class="label">route:</h3>
+                    <input id="routeInput" class="route-input" placeholder="/api/endpoint"></input>
+                </div>
+                <div class="area-component">
+                    <h3 class="label">method:</h3>
+                    <select id="routeType" class="route-type-select" name="endpointType" id="endpointTypeSelect">
+                        <option value="get">GET</option>
+                        <option value="get">POST</option>
+                        <option value="get">PUT</option>
+                        <option value="get">DELETE</option>
+                    </select>
+                    <button id="submit" class="submit-button">Submit</button>
+                </div>
             </div>
-            <div class="area-component">
-                <h3 class="label">method:</h3>
-                <select id="routeType" class="route-type-select" name="endpointType" id="endpointTypeSelect">
-                    <option value="get">GET</option>
-                    <option value="get">POST</option>
-                    <option value="get">PUT</option>
-                    <option value="get">DELETE</option>
-                </select>
-                <button id="submit" class="submit-button">Submit</button>
+            <div id="flowsDiv" class="tabcontent">
+                <button id="loadFlowButton" class="load-flow-button">Load flow</button>
+                <div class="area-component">
+                    <button id="submit" class="submit-button">Submit</button>
+                </div>
             </div>
         </div>
         <div class="area">
